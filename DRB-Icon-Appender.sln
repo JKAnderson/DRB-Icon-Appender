@@ -5,16 +5,32 @@ VisualStudioVersion = 15.0.27703.2035
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DRB-Icon-Appender", "DRB-Icon-Appender\DRB-Icon-Appender.csproj", "{963FB0E9-EAA3-470A-9E97-599A9F29AB55}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DSFormats", "..\..\GitHub\JKAnderson\DSFormats\DSFormats\DSFormats.csproj", "{38B89629-A437-400D-ABC6-97E76B227C41}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
+		Debug|x64 = Debug|x64
 		Release|Any CPU = Release|Any CPU
+		Release|x64 = Release|x64
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{963FB0E9-EAA3-470A-9E97-599A9F29AB55}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{963FB0E9-EAA3-470A-9E97-599A9F29AB55}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{963FB0E9-EAA3-470A-9E97-599A9F29AB55}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{963FB0E9-EAA3-470A-9E97-599A9F29AB55}.Debug|x64.Build.0 = Debug|Any CPU
 		{963FB0E9-EAA3-470A-9E97-599A9F29AB55}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{963FB0E9-EAA3-470A-9E97-599A9F29AB55}.Release|Any CPU.Build.0 = Release|Any CPU
+		{963FB0E9-EAA3-470A-9E97-599A9F29AB55}.Release|x64.ActiveCfg = Release|Any CPU
+		{963FB0E9-EAA3-470A-9E97-599A9F29AB55}.Release|x64.Build.0 = Release|Any CPU
+		{38B89629-A437-400D-ABC6-97E76B227C41}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{38B89629-A437-400D-ABC6-97E76B227C41}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{38B89629-A437-400D-ABC6-97E76B227C41}.Debug|x64.ActiveCfg = Debug|x64
+		{38B89629-A437-400D-ABC6-97E76B227C41}.Debug|x64.Build.0 = Debug|x64
+		{38B89629-A437-400D-ABC6-97E76B227C41}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{38B89629-A437-400D-ABC6-97E76B227C41}.Release|Any CPU.Build.0 = Release|Any CPU
+		{38B89629-A437-400D-ABC6-97E76B227C41}.Release|x64.ActiveCfg = Release|x64
+		{38B89629-A437-400D-ABC6-97E76B227C41}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

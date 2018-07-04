@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace DRB_Icon_Appender
@@ -14,9 +11,19 @@ namespace DRB_Icon_Appender
         [STAThread]
         static void Main()
         {
+            Properties.Settings settings = Properties.Settings.Default;
+            if (settings.UpgradeRequired)
+            {
+                settings.Upgrade();
+                settings.UpgradeRequired = false;
+                settings.Save();
+            }
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new FormMain());
+
+            settings.Save();
         }
     }
 }
