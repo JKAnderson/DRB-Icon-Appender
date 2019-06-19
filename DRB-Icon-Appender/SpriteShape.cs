@@ -1,4 +1,4 @@
-﻿using DSFormats;
+﻿using SoulsFormats;
 using System;
 using System.Collections.Generic;
 
@@ -31,7 +31,7 @@ namespace DRB_Icon_Appender
             this.dsr = dsr;
             ID = Int32.Parse(dlgo.Name.Substring("EquIcon_".Length));
 
-            BinaryReaderEx br = new BinaryReaderEx(drb.shpr.Bytes, false);
+            BinaryReaderEx br = new BinaryReaderEx(false, drb.shpr.Bytes);
             ShprOffset = drb.shap.Entries[dlgo.ShapOffset / 8].Item2;
             br.Position = ShprOffset;
 
@@ -91,9 +91,9 @@ namespace DRB_Icon_Appender
 
             BinaryWriterEx bw = new BinaryWriterEx(false);
             bw.WriteBytes(drb.shpr.Bytes);
-            ShprOffset = bw.Position;
+            ShprOffset = (int)bw.Position;
             WriteSHPR(bw, textures);
-            drb.shpr.Bytes = bw.Finish();
+            drb.shpr.Bytes = bw.FinishBytes();
 
             int spriteOffset = drb.str.GetOffset("Sprite");
             drb.shap.Entries.Add((spriteOffset, ShprOffset));

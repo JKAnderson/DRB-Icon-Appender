@@ -1,6 +1,6 @@
-﻿using DSFormats;
-using Octokit;
+﻿using Octokit;
 using Semver;
+using SoulsFormats;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -132,11 +132,11 @@ namespace DRB_Icon_Appender
                 bw.Position = shape.ShprOffset;
                 shape.WriteSHPR(bw, textures);
             }
-            drb.shpr.Bytes = bw.Finish();
+            drb.shpr.Bytes = bw.FinishBytes();
 
             byte[] bytes = drb.Write();
             if (remastered)
-                bytes = DCX.Compress(bytes);
+                bytes = DCX.Compress(bytes, DCX.Type.DarkSouls1);
 
             string drbPath = txtGameDir.Text + DRB_PATH + (remastered ? ".dcx" : "");
             if (!File.Exists(drbPath + ".bak"))
@@ -260,7 +260,7 @@ namespace DRB_Icon_Appender
             {
                 try
                 {
-                    menuTPF = TPF.Unpack(tpfBytes);
+                    menuTPF = TPF.Read(tpfBytes);
                 }
                 catch
                 {
@@ -296,7 +296,7 @@ namespace DRB_Icon_Appender
         {
             spriteShapeBindingSource.Clear();
             textures = new List<string>();
-            foreach (TPFEntry entry in menuTPF.Files)
+            foreach (TPF.Texture entry in menuTPF.Textures)
                 textures.Add(entry.Name);
 
             List<string> sortedNames = new List<string>(textures);

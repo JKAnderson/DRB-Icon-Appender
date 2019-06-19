@@ -1,4 +1,4 @@
-﻿using DSFormats;
+﻿using SoulsFormats;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -33,7 +33,7 @@ namespace DRB_Icon_Appender
 
         private DRBRaw(byte[] bytes)
         {
-            BinaryReaderEx br = new BinaryReaderEx(bytes, false);
+            BinaryReaderEx br = new BinaryReaderEx(false, bytes);
             br.AssertASCII("DRB\0");
             br.AssertInt32(0);
             br.AssertInt32(0);
@@ -92,7 +92,7 @@ namespace DRB_Icon_Appender
             bw.WriteInt32(0);
             bw.WriteInt32(0);
             bw.WriteInt32(0);
-            return bw.Finish();
+            return bw.FinishBytes();
         }
 
         private static void readSectionHeader(BinaryReaderEx br, string name, out int entrySize, out int entryCount)
@@ -135,10 +135,10 @@ namespace DRB_Icon_Appender
                 readSectionHeader(br, "STR\0", out int entrySize, out int entryCount);
 
                 strings = new Dictionary<int, string>();
-                int start = br.Position;
+                int start = (int)br.Position;
                 for (int i = 0; i < entryCount; i++)
                 {
-                    int offset = br.Position - start;
+                    int offset = (int)br.Position - start;
                     string s = br.ReadUTF16();
                     strings[offset] = s;
                 }
@@ -153,14 +153,14 @@ namespace DRB_Icon_Appender
                 bw.WriteInt32(strings.Values.Count);
                 bw.WriteInt32(0);
 
-                int start = bw.Position;
+                int start = (int)bw.Position;
                 List<int> offsets = new List<int>(strings.Keys);
                 offsets.Sort();
                 foreach (int offset in offsets)
                     bw.WriteUTF16(strings[offset], true);
 
                 bw.Pad(0x10);
-                bw.FillInt32("STRDataSize", bw.Position - start);
+                bw.FillInt32("STRDataSize", (int)bw.Position - start);
             }
 
             public string GetString(int offset)
@@ -212,7 +212,7 @@ namespace DRB_Icon_Appender
                 bw.WriteInt32(Entries.Count);
                 bw.WriteInt32(0);
 
-                int start = bw.Position;
+                int start = (int)bw.Position;
                 foreach ((int, int) entry in Entries)
                 {
                     bw.WriteInt32(entry.Item1);
@@ -221,7 +221,7 @@ namespace DRB_Icon_Appender
                     bw.WriteInt32(0);
                 }
                 bw.Pad(0x10);
-                bw.FillInt32("TEXIDataSize", bw.Position - start);
+                bw.FillInt32("TEXIDataSize", (int)bw.Position - start);
             }
         }
 
@@ -248,14 +248,14 @@ namespace DRB_Icon_Appender
                 bw.WriteInt32(Entries.Count);
                 bw.WriteInt32(0);
 
-                int start = bw.Position;
+                int start = (int)bw.Position;
                 foreach ((int, int) entry in Entries)
                 {
                     bw.WriteInt32(entry.Item1);
                     bw.WriteInt32(entry.Item2);
                 }
                 bw.Pad(0x10);
-                bw.FillInt32("SHAPDataSize", bw.Position - start);
+                bw.FillInt32("SHAPDataSize", (int)bw.Position - start);
             }
         }
         
@@ -263,11 +263,11 @@ namespace DRB_Icon_Appender
         {
             readSectionHeader(br, "DLGO", out int entrySize, out int entryCount);
 
-            int start = br.Position;
+            int start = (int)br.Position;
             Dictionary<int, DLGOEntry> dlgoEntries = new Dictionary<int, DLGOEntry>();
             for (int i = 0; i < entryCount; i++)
             {
-                int offset = br.Position - start;
+                int offset = (int)br.Position - start;
                 dlgoEntries[offset] = new DLGOEntry(br, str);
             }
             br.Pad(0x10);
@@ -345,22 +345,22 @@ namespace DRB_Icon_Appender
                 bw.WriteInt32(dlgoEntries.Count);
                 bw.WriteInt32(0);
 
-                int start = bw.Position;
+                int start = (int)bw.Position;
                 foreach (DLGOEntry dlgoEntry in dlgoEntries)
                     dlgoEntry.Write(bw);
                 bw.Pad(0x10);
-                bw.FillInt32("DLGODataSize", bw.Position - start);
+                bw.FillInt32("DLGODataSize", (int)bw.Position - start);
 
                 bw.WriteASCII("DLG\0");
                 bw.ReserveInt32("DLGDataSize");
                 bw.WriteInt32(Entries.Count);
                 bw.WriteInt32(0);
 
-                start = bw.Position;
+                start = (int)bw.Position;
                 foreach (DLGEntry dlgEntry in Entries)
                     dlgEntry.Write(bw);
                 bw.Pad(0x10);
-                bw.FillInt32("DLGDataSize", bw.Position - start);
+                bw.FillInt32("DLGDataSize", (int)bw.Position - start);
             }
         }
 
