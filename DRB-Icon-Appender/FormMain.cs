@@ -23,10 +23,14 @@ namespace DRB_Icon_Appender
         private DRB drb;
         private List<string> textures;
         private List<SpriteWrapper> sprites;
+        private BindingSource iconBindingSource;
 
         public FormMain()
         {
             InitializeComponent();
+            dgvIcons.AutoGenerateColumns = false;
+            iconBindingSource = new BindingSource();
+            dgvIcons.DataSource = iconBindingSource;
         }
 
         private async void FormMain_Load(object sender, EventArgs e)
@@ -188,7 +192,7 @@ namespace DRB_Icon_Appender
             icons.Dlgos.Add(dlgo);
 
             var sprite = new SpriteWrapper(dlgo, textures);
-            spriteShapeBindingSource.Add(sprite);
+            iconBindingSource.Add(sprite);
             sprites.Sort();
 
             foreach (DataGridViewRow row in dgvIcons.Rows)
@@ -242,14 +246,14 @@ namespace DRB_Icon_Appender
 
         public void fillDataGridView(TPF menuTPF, DRB menuDRB)
         {
-            spriteShapeBindingSource.Clear();
+            iconBindingSource.Clear();
             textures = new List<string>();
             foreach (TPF.Texture entry in menuTPF.Textures)
                 textures.Add(entry.Name);
 
             List<string> sortedNames = new List<string>(textures);
             sortedNames.Sort();
-            textureDataGridViewComboBoxColumn.DataSource = sortedNames;
+            dgvIconsTextureCol.DataSource = sortedNames;
 
             drb = menuDRB;
             sprites = new List<SpriteWrapper>();
@@ -260,12 +264,12 @@ namespace DRB_Icon_Appender
                 sprites.Add(new SpriteWrapper(dlgo, textures));
             }
             sprites.Sort();
-            spriteShapeBindingSource.DataSource = sprites;
+            iconBindingSource.DataSource = sprites;
         }
 
         private void closeFiles()
         {
-            spriteShapeBindingSource.Clear();
+            iconBindingSource.Clear();
             drb = null;
             textures = null;
             sprites = null;

@@ -32,32 +32,30 @@
             System.Windows.Forms.Label lblGameDir;
             System.Windows.Forms.ToolTip toolTip1;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormMain));
-            this.txtGameDir = new System.Windows.Forms.TextBox();
             this.btnBrowse = new System.Windows.Forms.Button();
             this.btnExplore = new System.Windows.Forms.Button();
             this.btnRestore = new System.Windows.Forms.Button();
             this.btnSave = new System.Windows.Forms.Button();
-            this.dgvIcons = new System.Windows.Forms.DataGridView();
-            this.ofdExecutable = new System.Windows.Forms.OpenFileDialog();
             this.btnAddIcon = new System.Windows.Forms.Button();
             this.btnClose = new System.Windows.Forms.Button();
             this.btnOpen = new System.Windows.Forms.Button();
+            this.txtGameDir = new System.Windows.Forms.TextBox();
+            this.dgvIcons = new System.Windows.Forms.DataGridView();
+            this.dgvIconsIDCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dgvIconsTextureCol = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.dgvIconsTopLeftCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dgvIconsTopEdgeCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dgvIconsWidthCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dgvIconsHeightCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ofdExecutable = new System.Windows.Forms.OpenFileDialog();
             this.llbUpdate = new System.Windows.Forms.LinkLabel();
             this.lblUpdate = new System.Windows.Forms.Label();
             this.nudIconID = new System.Windows.Forms.NumericUpDown();
             this.lblIconID = new System.Windows.Forms.Label();
-            this.iDDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.textureDataGridViewComboBoxColumn = new System.Windows.Forms.DataGridViewComboBoxColumn();
-            this.leftEdgeDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.topEdgeDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.widthDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.heightDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.spriteShapeBindingSource = new System.Windows.Forms.BindingSource(this.components);
             lblGameDir = new System.Windows.Forms.Label();
             toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.dgvIcons)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudIconID)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.spriteShapeBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
             // lblGameDir
@@ -68,17 +66,6 @@
             lblGameDir.Size = new System.Drawing.Size(80, 13);
             lblGameDir.TabIndex = 0;
             lblGameDir.Text = "Game Directory";
-            // 
-            // txtGameDir
-            // 
-            this.txtGameDir.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtGameDir.Location = new System.Drawing.Point(12, 25);
-            this.txtGameDir.Name = "txtGameDir";
-            this.txtGameDir.ReadOnly = true;
-            this.txtGameDir.Size = new System.Drawing.Size(642, 20);
-            this.txtGameDir.TabIndex = 1;
-            this.txtGameDir.Text = "C:\\Program Files (x86)\\Steam\\steamapps\\common\\DARK SOULS REMASTERED";
             // 
             // btnBrowse
             // 
@@ -126,38 +113,6 @@
             this.btnSave.UseVisualStyleBackColor = true;
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
             // 
-            // dgvIcons
-            // 
-            this.dgvIcons.AllowUserToAddRows = false;
-            this.dgvIcons.AllowUserToDeleteRows = false;
-            this.dgvIcons.AllowUserToResizeColumns = false;
-            this.dgvIcons.AllowUserToResizeRows = false;
-            this.dgvIcons.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.dgvIcons.AutoGenerateColumns = false;
-            this.dgvIcons.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvIcons.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.iDDataGridViewTextBoxColumn,
-            this.textureDataGridViewComboBoxColumn,
-            this.leftEdgeDataGridViewTextBoxColumn,
-            this.topEdgeDataGridViewTextBoxColumn,
-            this.widthDataGridViewTextBoxColumn,
-            this.heightDataGridViewTextBoxColumn});
-            this.dgvIcons.DataSource = this.spriteShapeBindingSource;
-            this.dgvIcons.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
-            this.dgvIcons.Location = new System.Drawing.Point(12, 80);
-            this.dgvIcons.Name = "dgvIcons";
-            this.dgvIcons.RowHeadersVisible = false;
-            this.dgvIcons.Size = new System.Drawing.Size(642, 454);
-            this.dgvIcons.TabIndex = 9;
-            this.dgvIcons.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.dgvIcons_DataError);
-            // 
-            // ofdExecutable
-            // 
-            this.ofdExecutable.Filter = "Dark Souls Executable|*.exe";
-            this.ofdExecutable.Title = "Select Dark Souls executable...";
-            // 
             // btnAddIcon
             // 
             this.btnAddIcon.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
@@ -194,6 +149,85 @@
             toolTip1.SetToolTip(this.btnOpen, "Load files from the game directory");
             this.btnOpen.UseVisualStyleBackColor = true;
             this.btnOpen.Click += new System.EventHandler(this.btnOpen_Click);
+            // 
+            // txtGameDir
+            // 
+            this.txtGameDir.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtGameDir.Location = new System.Drawing.Point(12, 25);
+            this.txtGameDir.Name = "txtGameDir";
+            this.txtGameDir.ReadOnly = true;
+            this.txtGameDir.Size = new System.Drawing.Size(642, 20);
+            this.txtGameDir.TabIndex = 1;
+            this.txtGameDir.Text = "C:\\Program Files (x86)\\Steam\\steamapps\\common\\DARK SOULS REMASTERED";
+            // 
+            // dgvIcons
+            // 
+            this.dgvIcons.AllowUserToAddRows = false;
+            this.dgvIcons.AllowUserToDeleteRows = false;
+            this.dgvIcons.AllowUserToResizeColumns = false;
+            this.dgvIcons.AllowUserToResizeRows = false;
+            this.dgvIcons.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.dgvIcons.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvIcons.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.dgvIconsIDCol,
+            this.dgvIconsTextureCol,
+            this.dgvIconsTopLeftCol,
+            this.dgvIconsTopEdgeCol,
+            this.dgvIconsWidthCol,
+            this.dgvIconsHeightCol});
+            this.dgvIcons.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
+            this.dgvIcons.Location = new System.Drawing.Point(12, 80);
+            this.dgvIcons.Name = "dgvIcons";
+            this.dgvIcons.RowHeadersVisible = false;
+            this.dgvIcons.Size = new System.Drawing.Size(642, 454);
+            this.dgvIcons.TabIndex = 9;
+            this.dgvIcons.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.dgvIcons_DataError);
+            // 
+            // dgvIconsIDCol
+            // 
+            this.dgvIconsIDCol.DataPropertyName = "ID";
+            this.dgvIconsIDCol.HeaderText = "ID";
+            this.dgvIconsIDCol.Name = "dgvIconsIDCol";
+            this.dgvIconsIDCol.ReadOnly = true;
+            // 
+            // dgvIconsTextureCol
+            // 
+            this.dgvIconsTextureCol.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.dgvIconsTextureCol.DataPropertyName = "Texture";
+            this.dgvIconsTextureCol.HeaderText = "Texture";
+            this.dgvIconsTextureCol.Name = "dgvIconsTextureCol";
+            // 
+            // dgvIconsTopLeftCol
+            // 
+            this.dgvIconsTopLeftCol.DataPropertyName = "LeftEdge";
+            this.dgvIconsTopLeftCol.HeaderText = "Left Edge";
+            this.dgvIconsTopLeftCol.Name = "dgvIconsTopLeftCol";
+            // 
+            // dgvIconsTopEdgeCol
+            // 
+            this.dgvIconsTopEdgeCol.DataPropertyName = "TopEdge";
+            this.dgvIconsTopEdgeCol.HeaderText = "Top Edge";
+            this.dgvIconsTopEdgeCol.Name = "dgvIconsTopEdgeCol";
+            // 
+            // dgvIconsWidthCol
+            // 
+            this.dgvIconsWidthCol.DataPropertyName = "Width";
+            this.dgvIconsWidthCol.HeaderText = "Width";
+            this.dgvIconsWidthCol.Name = "dgvIconsWidthCol";
+            // 
+            // dgvIconsHeightCol
+            // 
+            this.dgvIconsHeightCol.DataPropertyName = "Height";
+            this.dgvIconsHeightCol.HeaderText = "Height";
+            this.dgvIconsHeightCol.Name = "dgvIconsHeightCol";
+            // 
+            // ofdExecutable
+            // 
+            this.ofdExecutable.Filter = "Dark Souls Executable|*.exe";
+            this.ofdExecutable.Title = "Select Dark Souls executable...";
             // 
             // llbUpdate
             // 
@@ -241,59 +275,6 @@
             this.lblIconID.TabIndex = 23;
             this.lblIconID.Text = "Icon ID";
             // 
-            // iDDataGridViewTextBoxColumn
-            // 
-            this.iDDataGridViewTextBoxColumn.DataPropertyName = "ID";
-            this.iDDataGridViewTextBoxColumn.HeaderText = "ID";
-            this.iDDataGridViewTextBoxColumn.Name = "iDDataGridViewTextBoxColumn";
-            this.iDDataGridViewTextBoxColumn.ReadOnly = true;
-            this.iDDataGridViewTextBoxColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.iDDataGridViewTextBoxColumn.Width = 78;
-            // 
-            // textureDataGridViewComboBoxColumn
-            // 
-            this.textureDataGridViewComboBoxColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.textureDataGridViewComboBoxColumn.DataPropertyName = "Texture";
-            this.textureDataGridViewComboBoxColumn.HeaderText = "Texture";
-            this.textureDataGridViewComboBoxColumn.Name = "textureDataGridViewComboBoxColumn";
-            this.textureDataGridViewComboBoxColumn.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            // 
-            // leftEdgeDataGridViewTextBoxColumn
-            // 
-            this.leftEdgeDataGridViewTextBoxColumn.DataPropertyName = "LeftEdge";
-            this.leftEdgeDataGridViewTextBoxColumn.HeaderText = "Left Edge";
-            this.leftEdgeDataGridViewTextBoxColumn.Name = "leftEdgeDataGridViewTextBoxColumn";
-            this.leftEdgeDataGridViewTextBoxColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.leftEdgeDataGridViewTextBoxColumn.Width = 78;
-            // 
-            // topEdgeDataGridViewTextBoxColumn
-            // 
-            this.topEdgeDataGridViewTextBoxColumn.DataPropertyName = "TopEdge";
-            this.topEdgeDataGridViewTextBoxColumn.HeaderText = "Top Edge";
-            this.topEdgeDataGridViewTextBoxColumn.Name = "topEdgeDataGridViewTextBoxColumn";
-            this.topEdgeDataGridViewTextBoxColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.topEdgeDataGridViewTextBoxColumn.Width = 78;
-            // 
-            // widthDataGridViewTextBoxColumn
-            // 
-            this.widthDataGridViewTextBoxColumn.DataPropertyName = "Width";
-            this.widthDataGridViewTextBoxColumn.HeaderText = "Width";
-            this.widthDataGridViewTextBoxColumn.Name = "widthDataGridViewTextBoxColumn";
-            this.widthDataGridViewTextBoxColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.widthDataGridViewTextBoxColumn.Width = 78;
-            // 
-            // heightDataGridViewTextBoxColumn
-            // 
-            this.heightDataGridViewTextBoxColumn.DataPropertyName = "Height";
-            this.heightDataGridViewTextBoxColumn.HeaderText = "Height";
-            this.heightDataGridViewTextBoxColumn.Name = "heightDataGridViewTextBoxColumn";
-            this.heightDataGridViewTextBoxColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.heightDataGridViewTextBoxColumn.Width = 78;
-            // 
-            // spriteShapeBindingSource
-            // 
-            this.spriteShapeBindingSource.DataSource = typeof(DRB_Icon_Appender.SpriteShape);
-            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -321,7 +302,6 @@
             this.Load += new System.EventHandler(this.FormMain_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dgvIcons)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudIconID)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.spriteShapeBindingSource)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -335,20 +315,19 @@
         private System.Windows.Forms.Button btnSave;
         private System.Windows.Forms.DataGridView dgvIcons;
         private System.Windows.Forms.OpenFileDialog ofdExecutable;
-        private System.Windows.Forms.BindingSource spriteShapeBindingSource;
         private System.Windows.Forms.Button btnAddIcon;
-        private System.Windows.Forms.DataGridViewTextBoxColumn iDDataGridViewTextBoxColumn;
-        private System.Windows.Forms.DataGridViewComboBoxColumn textureDataGridViewComboBoxColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn leftEdgeDataGridViewTextBoxColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn topEdgeDataGridViewTextBoxColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn widthDataGridViewTextBoxColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn heightDataGridViewTextBoxColumn;
         private System.Windows.Forms.Button btnClose;
         private System.Windows.Forms.Button btnOpen;
         private System.Windows.Forms.LinkLabel llbUpdate;
         private System.Windows.Forms.Label lblUpdate;
         private System.Windows.Forms.NumericUpDown nudIconID;
         private System.Windows.Forms.Label lblIconID;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dgvIconsIDCol;
+        private System.Windows.Forms.DataGridViewComboBoxColumn dgvIconsTextureCol;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dgvIconsTopLeftCol;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dgvIconsTopEdgeCol;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dgvIconsWidthCol;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dgvIconsHeightCol;
     }
 }
 
