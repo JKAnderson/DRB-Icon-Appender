@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Media;
 using System.Net.Http;
 using System.Windows.Forms;
@@ -19,9 +20,9 @@ namespace DRB_Icon_Appender
         private static Properties.Settings settings = Properties.Settings.Default;
 
         private bool remastered;
-        private DRBRaw drb;
+        private DRB drb;
         private List<string> textures;
-        private List<SpriteShape> shapes;
+        private List<SpriteWrapper> sprites;
 
         public FormMain()
         {
@@ -125,23 +126,10 @@ namespace DRB_Icon_Appender
 
         private void btnSave_Click(object sender, EventArgs e)
         {
-            BinaryWriterEx bw = new BinaryWriterEx(false);
-            bw.WriteBytes(drb.shpr.Bytes);
-            foreach (SpriteShape shape in shapes)
-            {
-                bw.Position = shape.ShprOffset;
-                shape.WriteSHPR(bw, textures);
-            }
-            drb.shpr.Bytes = bw.FinishBytes();
-
-            byte[] bytes = drb.Write();
-            if (remastered)
-                bytes = DCX.Compress(bytes, DCX.Type.DarkSouls1);
-
             string drbPath = txtGameDir.Text + DRB_PATH + (remastered ? ".dcx" : "");
             if (!File.Exists(drbPath + ".bak"))
                 File.Copy(drbPath, drbPath + ".bak");
-            File.WriteAllBytes(drbPath, bytes);
+            drb.Write(drbPath);
             SystemSounds.Asterisk.Play();
         }
 
@@ -157,8 +145,8 @@ namespace DRB_Icon_Appender
 
         private bool shapePresent(int id)
         {
-            foreach (SpriteShape shape in shapes)
-                if (shape.ID == id)
+            foreach (SpriteWrapper sprite in sprites)
+                if (sprite.ID == id)
                     return true;
             return false;
         }
@@ -178,7 +166,7 @@ namespace DRB_Icon_Appender
                         id++;
                     if (id > 9999)
                     {
-                        showError("ID may not exceed 9999.");
+                        ShowError("ID may not exceed 9999.");
                         return;
                     }
                     nudIconID.Value = id;
@@ -187,112 +175,72 @@ namespace DRB_Icon_Appender
                     return;
             }
 
-            SpriteShape shape = new SpriteShape(id, drb, textures, remastered);
-            spriteShapeBindingSource.Add(shape);
-            shapes.Sort((s1, s2) => s1.ID.CompareTo(s2.ID));
+            var shape = new DRB.Shape.Sprite()
+            {
+                TexLeftEdge = 1,
+                TexTopEdge = 1,
+                TexRightEdge = (short)(remastered ? 160 : 80),
+                TexBottomEdge = (short)(remastered ? 180 : 90),
+            };
+            var control = new DRB.Control.Static();
+            var dlgo = new DRB.Dlgo($"EquIcon_{id:D4}", shape, control);
+            DRB.Dlg icons = drb.Dlgs.Find(dlg => dlg.Name == "Icon");
+            icons.Dlgos.Add(dlgo);
+
+            var sprite = new SpriteWrapper(dlgo, textures);
+            spriteShapeBindingSource.Add(sprite);
+            sprites.Sort();
 
             foreach (DataGridViewRow row in dgvIcons.Rows)
                 if ((int)row.Cells[0].Value == id)
                     dgvIcons.CurrentCell = row.Cells[0];
         }
 
-        private void showError(string message, bool silent = false)
-        {
-            if (!silent)
-                MessageBox.Show(message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-        }
-
-        private byte[] readFile(string path)
-        {
-            if (!File.Exists(path))
-            {
-                showError("File not found:\n" + path);
-                return null;
-            }
-
-            byte[] result;
-
-            try
-            {
-                result = File.ReadAllBytes(path);
-            }
-            catch
-            {
-                showError("Could not read file:\n" + path);
-                return null;
-            }
-
-            if (Path.GetExtension(path) == ".dcx")
-            {
-                try
-                {
-                    result = DCX.Decompress(result);
-                }
-                catch
-                {
-                    showError("Could not decompress file:\n" + path);
-                    return null;
-                }
-            }
-
-            return result;
-        }
-
         private void loadFiles(string gameDir, bool silent = false)
         {
-            if (File.Exists(gameDir + "\\DARKSOULS.exe"))
+            if (File.Exists($@"{gameDir}\DARKSOULS.exe"))
+            {
                 remastered = false;
-            else if (File.Exists(gameDir + "\\DarkSoulsRemastered.exe"))
+            }
+            else if (File.Exists($@"{gameDir}\DarkSoulsRemastered.exe"))
+            {
                 remastered = true;
+            }
             else
             {
-                showError("Dark Souls executable not found in this directory:\n" + gameDir, silent);
+                ShowError($"Dark Souls executable not found in directory:\n{gameDir}", silent);
                 return;
             }
 
             TPF menuTPF;
-            string tpfPath = gameDir + TPF_PATH + (remastered ? ".dcx" : "");
-            byte[] tpfBytes = readFile(tpfPath);
-
-            if (tpfBytes == null)
-                return;
-            else
+            string tpfPath = $"{gameDir}{TPF_PATH}{(remastered ? ".dcx" : "")}";
+            try
             {
-                try
-                {
-                    menuTPF = TPF.Read(tpfBytes);
-                }
-                catch
-                {
-                    showError("Could not unpack TPF:\n" + tpfPath, silent);
-                    return;
-                }
+                menuTPF = TPF.Read(tpfPath);
+            }
+            catch (Exception ex)
+            {
+                ShowError($"Failed to read TPF:\n{tpfPath}\n\n{ex}", silent);
+                return;
             }
 
-            DRBRaw menuDRB;
-            string drbPath = gameDir + DRB_PATH + (remastered ? ".dcx" : "");
-            byte[] drbBytes = readFile(drbPath);
-
-            if (drbBytes == null)
-                return;
-            else
+            DRB menuDRB;
+            string drbPath = $"{gameDir}{DRB_PATH}{(remastered ? ".dcx" : "")}";
+            try
             {
-                try
-                {
-                    menuDRB = DRBRaw.Read(drbBytes);
-                }
-                catch
-                {
-                    showError("Could not read DRB:\n" + drbPath, silent);
-                    return;
-                }
+                menuDRB = DRB.Read(drbPath, remastered);
+            }
+            catch (Exception ex)
+            {
+                ShowError($"Failed to read DRB:\n{drbPath}{ex}", silent);
+                return;
             }
 
             fillDataGridView(menuTPF, menuDRB);
             enableControls(true);
         }
 
-        public void fillDataGridView(TPF menuTPF, DRBRaw menuDRB)
+        public void fillDataGridView(TPF menuTPF, DRB menuDRB)
         {
             spriteShapeBindingSource.Clear();
             textures = new List<string>();
@@ -304,17 +252,15 @@ namespace DRB_Icon_Appender
             textureDataGridViewComboBoxColumn.DataSource = sortedNames;
 
             drb = menuDRB;
-            shapes = new List<SpriteShape>();
-            foreach (DRBRaw.DLGEntry dlg in menuDRB.dlg.Entries)
+            sprites = new List<SpriteWrapper>();
+
+            DRB.Dlg icons = menuDRB.Dlgs.Find(dlg => dlg.Name == "Icon");
+            foreach (DRB.Dlgo dlgo in icons.Dlgos.Where(dlgo => dlgo.Shape is DRB.Shape.Sprite))
             {
-                if (dlg.Name == "Icon")
-                {
-                    foreach (DRBRaw.DLGOEntry dlgo in dlg.DLGOEntries)
-                        shapes.Add(new SpriteShape(dlgo, drb, textures, remastered));
-                }
+                sprites.Add(new SpriteWrapper(dlgo, textures));
             }
-            shapes.Sort((s1, s2) => s1.ID.CompareTo(s2.ID));
-            spriteShapeBindingSource.DataSource = shapes;
+            sprites.Sort();
+            spriteShapeBindingSource.DataSource = sprites;
         }
 
         private void closeFiles()
@@ -322,7 +268,7 @@ namespace DRB_Icon_Appender
             spriteShapeBindingSource.Clear();
             drb = null;
             textures = null;
-            shapes = null;
+            sprites = null;
             enableControls(false);
         }
 
@@ -330,6 +276,12 @@ namespace DRB_Icon_Appender
         {
             SystemSounds.Hand.Play();
             e.Cancel = true;
+        }
+
+        private void ShowError(string message, bool silent = false)
+        {
+            if (!silent)
+                MessageBox.Show(message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }
 }
